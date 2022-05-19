@@ -85,14 +85,14 @@ export const commentSchema = new mongoose.Schema(
     createdById: {
       type: mongoose.Schema.ObjectId,
       ref: 'Profile',
-      required: true
+      required: true,
     },
     createdByName: {
-      type: String
+      type: String,
     },
     createdBySurname: {
-      type: String
-    }
+      type: String,
+    },
   },
   { timestamps: true }
 );
@@ -104,13 +104,13 @@ const profileSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Email required'],
     unique: true,
-    validate: (email) => emailRegex.test(email)
+    validate: (email) => emailRegex.test(email),
   },
   password: {
     type: String,
     required: [true, 'Password required'],
     minlength: [8, 'Password must be a minimum of 8 characters'],
-    validate: (password) => passwordRegex.test(password)
+    validate: (password) => passwordRegex.test(password),
   },
   isHelper: { type: Boolean },
   averageRating: { type: String },
@@ -122,7 +122,7 @@ const profileSchema = new mongoose.Schema({
   imageService: { type: String },
   comments: [commentSchema],
   posts: { type: Array },
-  isAdmin: { type: Boolean }
+  isAdmin: { type: Boolean },
 });
 
 profileSchema.pre('save', function encryptPassword(next) {
@@ -155,7 +155,7 @@ const createPost = async (req, res, next) => {
   try {
     if (!req.currentUser) {
       res.status(400).json({
-        message: 'Unauthorised. You must be signed in to create a post.'
+        message: 'Unauthorised. You must be signed in to create a post.',
       });
     } else {
       // console.log('req.currentUser', req.currentUser);
@@ -163,7 +163,7 @@ const createPost = async (req, res, next) => {
         ...req.body,
         createdById: req.currentUser._id,
         createdByName: req.currentUser.firstName,
-        createdBySurname: req.currentUser.surname
+        createdBySurname: req.currentUser.surname,
       });
       // await Profile.updateMany(
       //   { _id: newPost.service },
@@ -205,7 +205,7 @@ async function checkProfileAndPerformAction(req, res, action) {
     return res.status(404).json({ message: 'Post not found' });
   } else if (!post.createdById.equals(req.currentUser._id)) {
     return res.status(404).json({
-      message: `Unauthorised action. You must be the creator of this post to ${action} it.`
+      message: `Unauthorised action. You must be the creator of this post to ${action} it.`,
     });
   } else {
     if (action === 'delete') {
@@ -245,7 +245,7 @@ export default {
   getAllPosts,
   getAllPostsForProfile,
   updatePost,
-  deletePost
+  deletePost,
 };
 ```
 
@@ -341,9 +341,9 @@ export default router;
 
 ## Bugs, Blockers & Wins
 
-- when someone registers as a new helper it doesn't get saved to the database as a helper. I plan to resolve this bug in a future release.
+- When someone registers as a new helper it doesn't get saved to the database as a helper. I plan to resolve this bug in a future release.
 
 ## Future Features & Key Learnings
 
-- implement an edit profile function (where a user can edit their own profile, become a helper, add a bio etc),
+- Implement an edit profile function (where a user can edit their own profile, become a helper, add a bio etc),
 - Messaging functionality where users can reach out to helpers to arrange appointments and request more information. This could possibly extend to a live chat feature.
