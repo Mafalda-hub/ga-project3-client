@@ -59,9 +59,19 @@ You can find instructions for installing Node [here](https://nodejs.org/en/downl
 
 To contribute to this project, fork the repositories and make pull requests back to the upstream.
 
+## The Brief
+
+- Timeline: 1 week
+- To be completed as part of a team
+- Plan and build a full-stack application using the [MERN](https://www.mongodb.com/mern-stack) stack
+- Use [MongoDB](https://www.mongodb.com/) and [Express](https://expressjs.com/) to build a backend API with a database layer
+- Use [CRUD](https://developer.mozilla.org/en-US/docs/Glossary/CRUD) functionality
+- Build a separate frontend application using [React.js](https://reactjs.org/)
+- Deploy the application as microservices to Heroku (backend) and Netlify (frontend)
+
 ## The Approach Taken
 
-As this was a group project we first pooled our ideas and decided to create an application that would facilitate community skill sharing. Users can create accounts and either advertise their skills to the local community, or as a skills-provider, advertise the services available.
+As this was a group project, we first pooled our ideas and decided to create an application that would facilitate community skill sharing. Users can create accounts and either advertise their skills to the local community, or as a skills-provider, advertise the services available.
 
 We decided to split the tasks between the 3 developers in the team and create a kanban board using trello. This also provided experience in `agile workflows`. As part of this, we held daily standups to discuss what we had worked on in the previous day, the tasks that we would be tackling and any potential blockers we were aware of.
 
@@ -316,34 +326,104 @@ export default router;
 
 - Frontend
 
-  - Development of React.js components to fetch data and render UI
-  - Responsive design
+As part of my responsibilities on the frontend, I was tasked with creating various React.js components to display parts of the UI. These included:
+
+- - Building the `About page`
+  <div align="center">
+  <img src="./assets/about_page.png"  height="210px"/>
+  </div >
+
+- - Building the `new post` components in the users profile area
+
+```jsx
+<div className={createPostPopup ? 'add-post-window' : 'hide'}>
+  <h1>Create a new Post</h1>
+  <FontAwesomeIcon
+    className="close-new-post"
+    icon={faXmark}
+    onClick={createPostClicked}
+  />
+  <label className="new-post-label" htmlFor="new-post-text">
+    Text*
+  </label>
+  <textarea
+    className="new-post-input"
+    name="text"
+    id="new-post-text"
+    placeholder="What would you like help with?"
+    cols="30"
+    rows="5"
+    value={newPostData.text}
+    onChange={handlePostInputChange}
+  ></textarea>
+  <label className="new-post-label" htmlFor="new-post-service">
+    Service(s) Required*
+  </label>
+  <input
+    className="new-post-input"
+    type="text"
+    name="service"
+    id="new-post-service"
+    placeholder="Baby sitting, electronics repair, decorating..."
+    value={newPostData.service}
+    onChange={handlePostInputChange}
+  />
+  <label className="new-post-label" htmlFor="new-post-urgency">
+    Urgency
+  </label>
+  <input
+    className="new-post-input"
+    type="text"
+    name="urgency"
+    id="new-post-urgency"
+    placeholder="How urgent is your request?"
+    value={newPostData.urgency}
+    onChange={handlePostInputChange}
+  />
+  <button
+    className={
+      getLoggedInUserId() ? 'submit-new-post' : 'submit-new-post-disallowed'
+    }
+    onClick={handleSubmitPost}
+  >
+    Submit
+  </button>
+  <p className={!getLoggedInUserId() ? 'logged-in-warning' : 'hide'}>
+    You must be
+    <Link className="redirect-page" to={'/login'}>
+      logged in
+    </Link>
+    to create a post.
+  </p>
+</div>
+```
+
+<div align="center">
+<img src="./assets/create_new_post.png"  height="210px"/>
+</div>
+
+- - Other contributions to styling of various pages
+  <div align="center">
+    <div padding="20px"><img src="./assets/services_page.png"  height="210px"/></div>
+    <div padding="20px"><img src="./assets/single_profile.png"  height="210px"/></div>
+    <div padding="20px"><img src="./assets/services_filter_page.png"  height="210px"/></div>
+    <div padding="20px"><img src="./assets/sidebar.png"  height="210px"/></div>
+    <div padding="20px"><img src="./assets/neighbourhoods_page.png"  height="210px"/></div>
+  </div >
+
+- - As we thought that this application would mostly be consumed on mobile, we made sure to use `media queries` to create responsive design, allowing users to use the application across all device sizes.
   <div align="center">
   <img src="./assets/responsiveness_feed_profiles.png"  height="210px"/>
   <img src="./assets/responsiveness_single_profile.png"  height="210px"/>
   </div >
-  - About page
-  <div align="center">
-  <img src="./assets/about_page.png"  height="210px"/>
-  </div >
-  - New post functionality in profile.js
-  <div align="center">
-  <img src="./assets/create_new_post.png"  height="210px"/>
-  </div>
-  - Other contributions to styling of various pages
-  <div align="center" >
-  <div margin="20px"><img src="./assets/single_profile.png"  height="210px"/></div>
-  <div margin="20px"><img src="./assets/services_page.png"  height="210px"/></div>
-  <div margin="20px"><img src="./assets/services_filter_page.png"  height="210px"/></div>
-  <div margin="20px"><img src="./assets/sidebar.png"  height="210px"/></div>
-  <div margin="20px"><img src="./assets/neighbourhoods_page.png"  height="210px"/></div>
-  </div >
 
 ## Bugs, Blockers & Wins
 
-- When someone registers as a new helper it doesn't get saved to the database as a helper. I plan to resolve this bug in a future release.
+- There is currently a small issue with user registering as a helper. Upon creation of the user, the `isUser` key does not register. I believe this is a frontend issue with the format of the request body but plan to spend some time addressing the bug in the near future.
+- A particular win was how we created the seed data. To make this code more readable and allow us to reuse functionality across the application, we created JavaScript functions to create users and then used these across both the application source code and the seeding functions for local and production use.
+- The mobile functionality was another win. We designed the application `mobile first` which made the styling and layout much easier as we didn't have to retrospectively change the design to make it look good on smaller devices.
 
 ## Future Features & Key Learnings
 
-- Implement an edit profile function (where a user can edit their own profile, become a helper, add a bio etc),
-- Messaging functionality where users can reach out to helpers to arrange appointments and request more information. This could possibly extend to a live chat feature.
+- I would like to implement an edit profile function (where a user can edit their own profile, become a helper, add a bio etc)
+- I think it would be great to build messaging functionality where users can reach out to helpers to arrange appointments and request more information. This could possibly extend to a live chat feature where users could create chat rooms and host discussions on the app.
